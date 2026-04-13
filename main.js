@@ -4,7 +4,6 @@ import CryptoJS from 'crypto-js';
 const plaintextInput     = document.getElementById('plaintext-input');
 const secretKeyInput     = document.getElementById('secret-key-input');
 const toggleKeyBtn       = document.getElementById('toggle-key-btn');
-const eyeIcon            = document.getElementById('eye-icon');
 
 const btnCifrar          = document.getElementById('btn-cifrar');
 const cipherOutput       = document.getElementById('cipher-output');
@@ -51,7 +50,7 @@ const descifrar = (texto, llave) => {
 toggleKeyBtn.addEventListener('click', () => {
   const isPassword = secretKeyInput.type === 'password';
   secretKeyInput.type = isPassword ? 'text' : 'password';
-  eyeIcon.textContent  = isPassword ? '🙈' : '👁️';
+  toggleKeyBtn.textContent = isPassword ? 'Ocultar' : 'Mostrar';
 });
 
 // ─── Encrypt button ──────────────────────────────────────────────────────────
@@ -60,12 +59,12 @@ btnCifrar.addEventListener('click', () => {
   const llave = secretKeyInput.value;
 
   if (!texto) {
-    showToast('⚠️  Escribe un mensaje antes de cifrar.');
+    showToast('Escribe un mensaje antes de cifrar.');
     shakeElement(plaintextInput);
     return;
   }
   if (!llave) {
-    showToast('⚠️  La llave secreta no puede estar vacía.');
+    showToast('La llave secreta no puede estar vacía.');
     shakeElement(secretKeyInput);
     return;
   }
@@ -84,7 +83,7 @@ btnCifrar.addEventListener('click', () => {
   // Reset decipher panel
   resetDecipherPanel();
 
-  showToast('🔒 Texto cifrado correctamente.');
+  showToast('Texto cifrado correctamente.');
 });
 
 // ─── Decrypt button ──────────────────────────────────────────────────────────
@@ -93,12 +92,12 @@ btnDescifrar.addEventListener('click', () => {
   const llave        = secretKeyInput.value;
 
   if (!textoCifrado) {
-    showToast('⚠️  No hay texto cifrado para descifrar.');
+    showToast('No hay texto cifrado para descifrar.');
     shakeElement(cipherInputDecrypt);
     return;
   }
   if (!llave) {
-    showToast('⚠️  La llave secreta no puede estar vacía.');
+    showToast('La llave secreta no puede estar vacía.');
     shakeElement(secretKeyInput);
     return;
   }
@@ -116,25 +115,25 @@ btnDescifrar.addEventListener('click', () => {
     decipherOutput.textContent = resultado;
     copyDecipherBtn.hidden     = false;
 
-    setStatus('success', '✅ Descifrado exitoso con la llave provista.');
-    showToast('🔓 Texto descifrado correctamente.');
+    setStatus('success', 'Descifrado exitoso.');
+    showToast('Texto descifrado correctamente.');
 
   } catch (err) {
-    setStatus('error', `❌ Error: ${err.message}`);
+    setStatus('error', `Error: ${err.message}`);
     decipherPlaceholder.hidden = false;
     decipherOutput.hidden      = true;
     copyDecipherBtn.hidden     = true;
-    showToast('❌ No se pudo descifrar. Verifica la llave.');
+    showToast('No se pudo descifrar. Verifica la llave.');
   }
 });
 
 // ─── Copy buttons ─────────────────────────────────────────────────────────────
 copyCipherBtn.addEventListener('click', () => {
-  copyToClipboard(cipherOutput.textContent, '📋 Texto cifrado copiado.');
+  copyToClipboard(cipherOutput.textContent, 'Texto cifrado copiado.');
 });
 
 copyDecipherBtn.addEventListener('click', () => {
-  copyToClipboard(decipherOutput.textContent, '📋 Texto descifrado copiado.');
+  copyToClipboard(decipherOutput.textContent, 'Texto descifrado copiado.');
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -175,7 +174,7 @@ async function copyToClipboard(text, successMsg) {
     await navigator.clipboard.writeText(text);
     showToast(successMsg);
   } catch {
-    showToast('❌ No se pudo copiar al portapapeles.');
+    showToast('No se pudo copiar al portapapeles.');
   }
 }
 

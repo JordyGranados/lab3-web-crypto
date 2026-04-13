@@ -3,167 +3,108 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Práctica de cifrado y descifrado AES con CryptoJS - TC3005B Tecnológico de Monterrey" />
+    <meta name="description" content="Práctica de cifrado y descifrado AES con CryptoJS - TC3005B" />
     <title>Hash · Cipher · Decipher — TC3005B</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <div class="bg-grid"></div>
-    <div class="bg-glow glow-1"></div>
-    <div class="bg-glow glow-2"></div>
-
     <header class="header">
-      <div class="header-inner">
-        <div class="logo-badge">
-          <span class="logo-icon">🔐</span>
-          <span class="logo-text">CryptoLab</span>
-        </div>
-        <div class="course-badge">TC3005B · Tec de Monterrey</div>
-      </div>
+      <span class="header-title">CryptoLab</span>
+      <span class="header-course">TC3005B · Tec de Monterrey</span>
     </header>
 
     <main class="main">
-      <section class="hero">
-        <h1 class="hero-title">
-          <span class="gradient-text">Hash · Cipher</span>
-          <span class="hero-subtitle">· Decipher</span>
-        </h1>
-        <p class="hero-desc">Cifrado simétrico AES con <code>CryptoJS</code></p>
-      </section>
+      <div class="page-title">
+        <h1>Cipher / Decipher</h1>
+        <p>Cifrado simétrico AES con <code>crypto-js</code></p>
+      </div>
 
-      <div class="card-container">
-        <!-- INPUT CARD -->
-        <div class="card">
-          <div class="card-header">
-            <span class="card-icon">✍️</span>
-            <h2 class="card-title">Texto plano</h2>
-          </div>
-          <div class="input-group">
-            <label for="plaintext-input" class="input-label">Mensaje a cifrar</label>
+      <div class="form-grid">
+
+        <!-- Columna izquierda: entrada -->
+        <section class="panel">
+          <h2 class="panel-title">Entrada</h2>
+
+          <div class="field">
+            <label for="plaintext-input">Texto plano</label>
             <textarea
               id="plaintext-input"
-              class="text-input"
-              placeholder="Escribe tu mensaje aquí..."
-              rows="4"
+              placeholder="Escribe el mensaje a cifrar..."
+              rows="5"
               spellcheck="false"
             ></textarea>
           </div>
 
-          <div class="input-group">
-            <label for="secret-key-input" class="input-label">
-              Llave secreta
-              <span class="key-hint">(se usará para cifrar y descifrar)</span>
-            </label>
-            <div class="key-wrapper">
+          <div class="field">
+            <label for="secret-key-input">Llave secreta</label>
+            <div class="input-row">
               <input
                 type="password"
                 id="secret-key-input"
-                class="text-input key-input"
-                placeholder="Ingresa tu llave secreta"
+                placeholder="Llave secreta"
                 value="12345678"
               />
-              <button class="toggle-key-btn" id="toggle-key-btn" title="Mostrar/Ocultar llave" aria-label="Mostrar u ocultar llave">
-                <span id="eye-icon">👁️</span>
+              <button class="btn-icon" id="toggle-key-btn" title="Mostrar / Ocultar llave">
+                Mostrar
               </button>
             </div>
           </div>
 
-          <button class="btn btn-encrypt" id="btn-cifrar">
-            <span class="btn-icon">🔒</span>
-            Cifrar texto
-          </button>
-        </div>
+          <button class="btn btn-primary" id="btn-cifrar">Cifrar</button>
+        </section>
 
-        <!-- CIPHER OUTPUT CARD -->
-        <div class="card card-result">
-          <div class="card-header">
-            <span class="card-icon">🔑</span>
-            <h2 class="card-title">Texto cifrado (AES)</h2>
+        <!-- Columna derecha: resultados -->
+        <section class="panel">
+          <h2 class="panel-title">Resultados</h2>
+
+          <div class="field">
+            <label>Texto cifrado</label>
+            <div class="result-box" id="cipher-output-box">
+              <p class="placeholder-text" id="cipher-placeholder">El texto cifrado aparecerá aquí.</p>
+              <p class="result-text mono" id="cipher-output" hidden></p>
+            </div>
+            <button class="btn-link" id="copy-cipher-btn" hidden>Copiar texto cifrado</button>
           </div>
 
-          <div class="result-block" id="cipher-block">
-            <p class="result-placeholder" id="cipher-placeholder">
-              El texto cifrado aparecerá aquí…
-            </p>
-            <p class="result-text mono" id="cipher-output" hidden></p>
-            <button class="copy-btn" id="copy-cipher-btn" hidden title="Copiar texto cifrado">
-              📋 Copiar
-            </button>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="input-group mt-0">
-            <label for="cipher-input-decrypt" class="input-label">
-              Texto cifrado para descifrar
-              <span class="key-hint">(se llena automáticamente o pégalo manualmente)</span>
-            </label>
+          <div class="field">
+            <label for="cipher-input-decrypt">Texto cifrado para descifrar</label>
             <textarea
               id="cipher-input-decrypt"
-              class="text-input mono"
-              placeholder="Pega aquí el texto cifrado en Base64…"
+              class="mono"
+              placeholder="Pega aquí el texto cifrado..."
               rows="3"
               spellcheck="false"
             ></textarea>
           </div>
 
-          <button class="btn btn-decrypt" id="btn-descifrar">
-            <span class="btn-icon">🔓</span>
-            Descifrar texto
-          </button>
-        </div>
+          <button class="btn btn-secondary" id="btn-descifrar">Descifrar</button>
 
-        <!-- DECIPHER OUTPUT CARD -->
-        <div class="card card-result">
-          <div class="card-header">
-            <span class="card-icon">📖</span>
-            <h2 class="card-title">Texto original descifrado</h2>
-          </div>
-
-          <div class="result-block" id="decipher-block">
-            <p class="result-placeholder" id="decipher-placeholder">
-              El texto descifrado aparecerá aquí…
-            </p>
-            <p class="result-text" id="decipher-output" hidden></p>
-            <button class="copy-btn" id="copy-decipher-btn" hidden title="Copiar texto descifrado">
-              📋 Copiar
-            </button>
+          <div class="field" style="margin-top: 16px;">
+            <label>Texto original descifrado</label>
+            <div class="result-box" id="decipher-output-box">
+              <p class="placeholder-text" id="decipher-placeholder">El texto descifrado aparecerá aquí.</p>
+              <p class="result-text" id="decipher-output" hidden></p>
+            </div>
+            <button class="btn-link" id="copy-decipher-btn" hidden>Copiar texto descifrado</button>
           </div>
 
           <div class="status-row" id="status-row" hidden>
             <span class="status-dot" id="status-dot"></span>
             <span class="status-msg" id="status-msg"></span>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <!-- Info section -->
-      <section class="info-section">
-        <div class="info-card">
-          <span class="info-icon">ℹ️</span>
-          <div>
-            <strong>¿Cómo funciona?</strong>
-            <p>Este laboratorio usa el algoritmo <strong>AES (Advanced Encryption Standard)</strong> a través de la librería <code>CryptoJS</code>. El texto se cifra con una llave secreta y sólo con esa misma llave puede ser descifrado.</p>
-          </div>
-        </div>
-        <div class="info-card">
-          <span class="info-icon">⚠️</span>
-          <div>
-            <strong>Nota de seguridad</strong>
-            <p>Para producción real usa llaves de <strong>256 bits</strong> generadas aleatoriamente y almacenadas de forma segura (p.ej. variables de entorno <code>VITE_APP_KEY</code>).</p>
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
 
     <footer class="footer">
-      <p>TC3005B · Tecnológico de Monterrey · 2025 &nbsp;|&nbsp; 🔐 CryptoJS AES</p>
+      TC3005B · Tecnológico de Monterrey · 2025
     </footer>
 
-    <div class="toast" id="toast" aria-live="polite"></div>
+    <div class="toast" id="toast"></div>
 
     <script type="module" src="/main.js"></script>
   </body>
